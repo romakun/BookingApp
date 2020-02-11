@@ -27,16 +27,7 @@ public class SearchSteps{
         searchHotelName = new SearchHotelName(keyword);
     }
 
-    @When("User does search")
-    public void search() {
-        driver = new ChromeDriver();
-        driver.get(BOOKING_SEARCH_URL);
-        bookingSearchPage = new BookingSearchPage(driver);
-        bookingSearchPage.searchByKeyword(searchHotelName.getSearchString());
-        searchPage = new BookingSearchResultPage(driver);
-    }
-
-    @Then("Wiki page {string} is on the first page")
+    @Then("Hotel name {string} is on the first page")
     public void assertSearchResult(String result) {
         result = result + " ";
         assertThat(String.format("There are no results for search string '%s' on first search page", result),
@@ -64,8 +55,8 @@ public class SearchSteps{
 
     @And("Hotel {string} raiting is {string}")
     public void hotelRaitingIsTrue(String result, String raiting) {
-        String hotelRaiting = "<" + driver.findElement(searchPage.findHotelRaitingLocator(result)).getText() + ">";
-        assertEquals(hotelRaiting, raiting, "Рейтинг отеля не соответствует ожидаемому");
+        String hotelRaiting = driver.findElement(searchPage.findHotelRaitingLocator(result)).getText();
+        assertEquals("Рейтинг отеля не соответствует ожидаемому", raiting, hotelRaiting);
         driver.findElement(searchPage.findHotelRaitingLocator(result));
         driver.quit();
     }
