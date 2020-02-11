@@ -1,0 +1,32 @@
+package pages;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindBy;
+
+import java.util.List;
+import java.util.stream.Collectors;
+
+public class BookingSearchResultPage extends BasePage {
+
+    @FindBy(xpath = "//span[contains(@class,'sr-hotel__name')]")
+    private List<WebElement> resultsHotelNames;
+    String raitingLocator = "//span[contains(text(),'%s')]/../../../../..//div[contains(@class,'bui-review-score__badge')]";
+
+
+    public BookingSearchResultPage(WebDriver driver) {
+        super(driver);
+    }
+
+    public List<String> getResultLinks() {
+        return resultsHotelNames.stream().map(result->result.getAttribute("innerText"))
+                .filter(result-> !result.isEmpty()).collect(Collectors.toList());
+    }
+
+    public By findHotelRaitingLocator(String hotelName){
+        By hotelRaiting = By.xpath(String.format(raitingLocator, hotelName));
+        return hotelRaiting;
+    }
+
+}
